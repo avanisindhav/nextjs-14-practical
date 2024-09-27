@@ -5,7 +5,6 @@ import { getPosts } from "@/lib/data";
 
 const getData = async () => {
   const res = await getPosts();
-  console.log({ res });
   return res;
 };
 
@@ -15,8 +14,8 @@ async function Gallery() {
     <div className={styles.container}>
       {(blogs ?? []).map((item) => {
         return (
-          <div className={styles.galleryCard} key={item.id}>
-            <GalleryCard />
+          <div className={styles.galleryCard} key={item._id}>
+            <GalleryCard item={item} />
           </div>
         );
       })}

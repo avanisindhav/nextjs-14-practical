@@ -1,45 +1,51 @@
-import React from "react";
+import React, { Suspense } from "react";
 import styles from "./GalleryCardDetails.module.css";
 import Image from "next/image";
+import { getPost } from "@/lib/data";
+import CardUser from "@/components/CardUser/CardUser";
 
-function GalleryCardDetails() {
+const getData = async (slug) => {
+  const res = await getPost(slug);
+  return res;
+};
+
+export const generateMetadata = async ({ params }) => {
+  const { slug } = params;
+
+  const post = await getPost(slug);
+
+  return {
+    title: post.title,
+    description: post.desc,
+  };
+};
+
+async function GalleryCardDetails({ params }) {
+  const { slug } = params;
+  const item = await getData(slug);
   return (
     <div className={styles.container}>
       <div className={styles.imageContainer}>
-        <Image src="/noavatar.png" alt="" fill className={styles.img} />
+        {item.img && (
+          <Image src={item.img} alt="" fill className={styles.img} />
+        )}
       </div>
       <div className={styles.textContainer}>
-        <h1 className={styles.title}>Title</h1>
+        <h1 className={styles.title}>{item.title}</h1>
         <div className={styles.detail}>
-          <Image
-            src="/noavatar.png"
-            alt=""
-            width={50}
-            height={50}
-            className={styles.avatar}
-          />
-          <div className={styles.detailText}>
-            <span className={styles.detailTitle}>Author</span>
-            <span className={styles.detailValue}>Avani Sind</span>
-          </div>
+          {item && (
+            <Suspense fallback={<div>Loading...</div>}>
+              <CardUser userId={item.userId} />
+            </Suspense>
+          )}
           <div className={styles.detailText}>
             <span className={styles.detailTitle}>Published At</span>
-            <span className={styles.detailValue}>01.01.2024</span>
+            <span className={styles.detailValue}>
+              {item.createdAt?.toString().slice(4, 16)}
+            </span>
           </div>
         </div>
-        <div className={styles.content}>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis
-          deleniti quos magni ducimus consectetur deserunt aliquid qui commodi,
-          maiores, rem sint laborum, id illum sunt nostrum placeat ratione ipsum
-          rerum amet explicabo et optio porro! Vitae facilis iusto non, dolorem
-          illum quos placeat repellat nesciunt tenetur pariatur. Nam maxime eius
-          sapiente accusantium, excepturi eveniet magnam, itaque quis suscipit
-          sed ratione ut enim et vel soluta temporibus. Est culpa quasi porro
-          accusamus ex, sequi quaerat nostrum deserunt, animi nemo minus
-          excepturi. Architecto repudiandae ullam modi? Nemo delectus dolores
-          deserunt consequatur eos sed aut? Ab consectetur commodi placeat optio
-          non dolor nesciunt?
-        </div>
+        <div className={styles.content}>{item.desc}</div>
       </div>
     </div>
   );
