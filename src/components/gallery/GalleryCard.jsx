@@ -27,7 +27,7 @@ export default function galleryCard() {
           facilis, eius corporis, odio id quia ad. Ipsum possimus aliquid quis
           ipsa? Perferendis, aspernatur dicta?
         </p>
-        <Link className={styles.link} href="/">
+        <Link className={styles.link} href="/gallery/post">
           READ MORE
         </Link>
       </div>
