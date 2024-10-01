@@ -12,7 +12,7 @@ const getData = async (slug) => {
 export const generateMetadata = async ({ params }) => {
   const { slug } = params;
 
-  const post = await getPost(slug);
+  const post = await getData(slug);
 
   return {
     title: post.title,

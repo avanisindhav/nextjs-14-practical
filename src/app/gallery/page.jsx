@@ -3,6 +3,11 @@ import GalleryCard from "@/components/gallery/GalleryCard";
 import styles from "./gallery.module.css";
 import { getPosts } from "@/lib/data";
 
+export const metadata = {
+  title: "Gallery Page",
+  description: "Gallery description",
+};
+
 const getData = async () => {
   const res = await getPosts();
   return res;
